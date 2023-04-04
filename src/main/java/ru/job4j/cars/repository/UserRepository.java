@@ -77,6 +77,7 @@ public class UserRepository {
         Session session = sf.openSession();
         List<User> rsl = new ArrayList<>();
         try {
+            session.beginTransaction();
             rsl = session.createQuery("from User as u order by u.id", User.class).list();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -95,6 +96,7 @@ public class UserRepository {
         Session session = sf.openSession();
         Optional<User> rsl = Optional.empty();
         try {
+            session.beginTransaction();
             rsl = session.createQuery("from User as u where u.id = :uId", User.class)
                     .setParameter("uId", id)
                     .uniqueResultOptional();
@@ -116,6 +118,7 @@ public class UserRepository {
         Session session = sf.openSession();
         List<User> rsl = new ArrayList<>();
         try {
+            session.beginTransaction();
             rsl = session.createQuery("from User where login like :uKey", User.class)
                     .setParameter("uKey", "%" + key + "%")
                     .getResultList();
@@ -137,6 +140,7 @@ public class UserRepository {
         Session session = sf.openSession();
         Optional<User> rsl = Optional.empty();
         try {
+            session.beginTransaction();
             rsl = session.createQuery("from User as u where u.login = :uLogin", User.class)
                     .setParameter("uLogin", login)
                     .uniqueResultOptional();
