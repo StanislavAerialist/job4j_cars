@@ -15,15 +15,6 @@ public class HistoryOwner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private int id;
-
-    @ManyToOne
-    @JoinColumn(name = "car_id")
-    private Car car;
-
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private Owner owner;
-
     private LocalDateTime startAt = LocalDateTime.now();
     private LocalDateTime endAt;
 
