@@ -13,8 +13,9 @@ import java.util.Optional;
 public class CarRepository {
     private final CrudRepository crudRepository;
 
-    public void save(Car car) {
-        crudRepository.run(session -> session.persist(car));
+    public Car save(Car car) {
+        crudRepository.run(session -> session.save(car));
+        return car;
     }
 
     public boolean update(Car car) {

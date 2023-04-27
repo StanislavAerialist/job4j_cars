@@ -7,14 +7,16 @@ import ru.job4j.cars.model.Engine;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
 public class EngineRepository {
     private final CrudRepository crudRepository;
 
-    public void save(Engine engine) {
-        crudRepository.run(session -> session.persist(engine));
+    public Engine save(Engine engine) {
+        crudRepository.run(session -> session.save(engine));
+        return engine;
     }
 
     public boolean update(Engine engine) {
@@ -28,7 +30,11 @@ public class EngineRepository {
         return crudRepository.runForBoolean("DELETE Engine WHERE id = :cId", Map.of("cId", id));
     }
 
-    public List<Car> findAll() {
-        return crudRepository.query("from Engine", Car.class);
+    public List<Engine> findAll() {
+        return crudRepository.query("from Engine", Engine.class);
+    }
+
+    public Optional<Engine> findById(int id) {
+        return crudRepository.optional("from Engine where id = :fId", Engine.class, Map.of("fId", id));
     }
 }

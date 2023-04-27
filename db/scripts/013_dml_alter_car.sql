@@ -1,0 +1,1 @@
+ALTER TABLE car ADD COLUMN owner_id int not null unique REFERENCES owner(id);

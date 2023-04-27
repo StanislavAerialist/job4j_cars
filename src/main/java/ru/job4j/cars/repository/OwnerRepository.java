@@ -3,18 +3,21 @@ package ru.job4j.cars.repository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.Car;
+import ru.job4j.cars.model.Engine;
 import ru.job4j.cars.model.Owner;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
 public class OwnerRepository {
     private final CrudRepository crudRepository;
 
-    public void save(Owner owner) {
-        crudRepository.run(session -> session.persist(owner));
+    public Owner save(Owner owner) {
+        crudRepository.run(session -> session.save(owner));
+        return owner;
     }
 
     public boolean update(Owner owner) {
@@ -28,7 +31,11 @@ public class OwnerRepository {
         return crudRepository.runForBoolean("DELETE Owner WHERE id = :cId", Map.of("cId", id));
     }
 
-    public List<Car> findAll() {
-        return crudRepository.query("from Owner", Car.class);
+    public List<Owner> findAll() {
+        return crudRepository.query("from Owner", Owner.class);
+    }
+
+    public Optional<Owner> findById(int id) {
+        return crudRepository.optional("from Owner where id = :fId", Owner.class, Map.of("fId", id));
     }
 }
