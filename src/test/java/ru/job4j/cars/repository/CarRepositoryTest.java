@@ -17,8 +17,7 @@ import ru.job4j.cars.model.User;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class CarRepositoryTest {
 
@@ -30,7 +29,7 @@ class CarRepositoryTest {
     private final OwnerRepository ownerRepository = new OwnerRepository(crudRepository);
     private final UserRepository userRepository = new UserRepository(sf);
 
-    @AfterEach
+    @BeforeEach
     public void cleanDb() {
         Session session = sf.openSession();
         try {
@@ -53,7 +52,7 @@ class CarRepositoryTest {
         User user = userRepository.create(new User(4, "login", "pass"));
         Owner owner = ownerRepository.save(new Owner(1, "OwnerName1", user));
         Car result = carRepository.save(new Car(1, "CarName1", engine, owner, Set.of(owner)));
-        assertThat(result, is(carRepository.findById(result.getId()).get()));
+        assertThat(result).isEqualTo(carRepository.findById(result.getId()).get());
     }
 
     @Test
@@ -63,7 +62,7 @@ class CarRepositoryTest {
         Owner owner = ownerRepository.save(new Owner(1, "OwnerName1", user));
         Car car = carRepository.save(new Car(1, "CarName1", engine, owner, Set.of(owner)));
         carRepository.delete(car.getId());
-        assertThat(carRepository.findById(car.getId()), is(Optional.empty()));
+        assertThat(carRepository.findById(car.getId())).isEqualTo(Optional.empty());
     }
 
     @Test
@@ -74,6 +73,6 @@ class CarRepositoryTest {
         Car car1 = carRepository.save(new Car(1, "CarName1", engine, owner, Set.of(owner)));
         Car car2 = new Car(1, "CarName2", engine, owner, Set.of(owner));
         carRepository.update(car2);
-        assertThat(carRepository.findById(car1.getId()).get().getName(), is("CarName2"));
+        assertThat(carRepository.findById(car1.getId()).get().getName()).isEqualTo("CarName2");
     }
 }

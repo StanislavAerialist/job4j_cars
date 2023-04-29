@@ -6,20 +6,20 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.job4j.cars.model.User;
 
 import java.util.Optional;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserRepositoryTest {
     private final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
     private final SessionFactory sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
     private final UserRepository userRepository = new UserRepository(sf);
 
-    @AfterEach
+    @BeforeEach
     public void cleanDb() {
         Session session = sf.openSession();
         try {
@@ -37,7 +37,7 @@ public class UserRepositoryTest {
     public void whenCreateUserThenFindByLogin() {
         User user = new User(1, "login", "pass");
         userRepository.create(user);
-        assertThat(user, is(userRepository.findByLogin("login").get()));
+        assertThat(user).isEqualTo(userRepository.findByLogin("login").get());
     }
 
     @Test
@@ -45,13 +45,13 @@ public class UserRepositoryTest {
         userRepository.create(new User(1, "login", "pass"));
         User user2 = new User(1, "login2", "pass2");
         userRepository.update(user2);
-        assertThat(user2.getLogin(), is(userRepository.findById(1).get().getLogin()));
+        assertThat(user2.getLogin()).isEqualTo(userRepository.findById(1).get().getLogin());
     }
 
     @Test
     public void whenDeleteUser() {
         User user = new User(1, "login", "pass");
         userRepository.delete(user.getId());
-        assertThat(userRepository.findById(user.getId()), is(Optional.empty()));
+        assertThat(userRepository.findById(user.getId())).isEqualTo(Optional.empty());
     }
 }
