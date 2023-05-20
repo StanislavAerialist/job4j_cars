@@ -16,7 +16,7 @@ public class EngineRepositoryTest {
     private final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
     private final SessionFactory sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
     private final CrudRepository crudRepository = new CrudRepository(sf);
-    private final EngineRepository engineRepository = new EngineRepository(crudRepository);
+    private final HibernateEngineRepository engineRepository = new HibernateEngineRepository(crudRepository);
 
     @AfterEach
     public void cleanDb() {

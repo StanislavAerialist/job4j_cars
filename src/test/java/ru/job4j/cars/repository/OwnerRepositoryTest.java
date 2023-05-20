@@ -18,8 +18,8 @@ public class OwnerRepositoryTest {
     private final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
     private final SessionFactory sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
     private final CrudRepository crudRepository = new CrudRepository(sf);
-    private final OwnerRepository ownerRepository = new OwnerRepository(crudRepository);
-    private final UserRepository userRepository = new UserRepository(sf);
+    private final HibernateOwnerRepository ownerRepository = new HibernateOwnerRepository(crudRepository);
+    private final HibernateUserRepository userRepository = new HibernateUserRepository(sf);
 
     @BeforeEach
     public void cleanDb() {

@@ -1,0 +1,1 @@
+INSERT INTO brand (name) VALUES ('Volkswagen'), ('BMW'), ('Mercedes'), ('Kia'), ('Ford');

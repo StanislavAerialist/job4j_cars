@@ -18,4 +18,13 @@
     <include file="scripts/011_ddl_create_file.sql" relativeToChangelogFile="true"/>
     <include file="scripts/012_ddl_create_history.sql" relativeToChangelogFile="true"/>
     <include file="scripts/013_dml_alter_car.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/014_ddl_create_brand.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/015_dml_insert_brand.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/016_ddl_create_body.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/017_dml_insert_body.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/018_ddl_create_category.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/019_dml_insert_category.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/020_ddl_create_transmission.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/021_dml_insert_transmission.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/022_dml_alter_car.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

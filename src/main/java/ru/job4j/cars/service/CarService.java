@@ -1,11 +1,11 @@
-package ru.job4j.cars.repository;
+package ru.job4j.cars.service;
 
 import ru.job4j.cars.model.Car;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface CarRepository {
+public interface CarService {
     Car save(Car car);
     boolean update(Car car);
     boolean delete(int id);

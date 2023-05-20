@@ -1,11 +1,11 @@
-package ru.job4j.cars.repository;
+package ru.job4j.cars.service;
 
 import ru.job4j.cars.model.Engine;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface EngineRepository {
+public interface EngineService {
     Engine save(Engine engine);
     boolean update(Engine engine);
     boolean delete(int id);
