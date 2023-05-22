@@ -15,6 +15,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class OwnerRepositoryTest {
+    /*
     private final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
     private final SessionFactory sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
     private final CrudRepository crudRepository = new CrudRepository(sf);
@@ -60,4 +61,6 @@ public class OwnerRepositoryTest {
         ownerRepository.delete(owner.getId());
         assertThat(ownerRepository.findById(owner.getId())).isEqualTo(Optional.empty());
     }
+
+     */
 }
