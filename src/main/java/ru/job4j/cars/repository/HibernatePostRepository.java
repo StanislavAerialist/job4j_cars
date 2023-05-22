@@ -2,6 +2,7 @@ package ru.job4j.cars.repository;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
+import ru.job4j.cars.model.Category;
 import ru.job4j.cars.model.Post;
 
 import java.time.LocalDateTime;
@@ -59,19 +60,27 @@ public class HibernatePostRepository implements PostRepository {
 
     @Override
     public List<Post> findPostByBrand(String brand) {
-        return crudRepository.query("SELECT p FROM Post p JOIN FETCH p.car WHERE p.car.name = :brand",
+        return crudRepository.query("SELECT p FROM Post p JOIN FETCH p.car c WHERE c.brand = :brand",
                 Post.class, Map.of("brand", brand));
     }
 
     @Override
     public List<Post> findPostBySold(boolean sold) {
-        return crudRepository.query("SELECT p FROM Post p JOIN FETCH p.car WHERE p.car.name = :sold",
-                Post.class, Map.of("sold", sold));
+        return crudRepository.query("from Post where sold = :pSold",
+                Post.class, Map.of("pSold", sold));
     }
 
     @Override
     public boolean setSold(int id) {
         return crudRepository.runForBoolean("UPDATE Post SET sold = :pSold where id = :pId",
                 Map.of("pSold", true, "pId", id));
+    }
+
+    @Override
+    public List<Post> findPostByCategory(Category category) {
+        return crudRepository.query(
+                "SELECT p FROM Post p JOIN FETCH p.car с WHERE с.category = :category",
+                Post.class, Map.of("category", category)
+        );
     }
 }

@@ -14,23 +14,23 @@ public class HibernateUserService implements UserService {
     private final HibernateUserRepository userRepository;
 
     @Override
-    public User create(User user) {
-        return userRepository.create(user);
+    public Optional<User> add(User user) {
+        return userRepository.add(user);
     }
 
     @Override
-    public void update(User user) {
-        userRepository.update(user);
+    public boolean update(User user) {
+        return userRepository.update(user);
     }
 
     @Override
-    public void delete(int userId) {
-        userRepository.delete(userId);
+    public boolean deleteById(int userId) {
+        return userRepository.deleteById(userId);
     }
 
     @Override
-    public List<User> findAllOrderById() {
-        return userRepository.findAllOrderById();
+    public Optional<User> findByLoginAndPassword(String login, String password) {
+        return userRepository.findByLoginAndPassword(login, password);
     }
 
     @Override
@@ -39,12 +39,8 @@ public class HibernateUserService implements UserService {
     }
 
     @Override
-    public List<User> findByLikeLogin(String key) {
-        return userRepository.findByLikeLogin(key);
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
-    @Override
-    public Optional<User> findByLogin(String login) {
-        return userRepository.findByLogin(login);
-    }
 }

@@ -13,7 +13,6 @@ import java.util.Optional;
 public class HibernateEngineService implements EngineService {
     private final HibernateEngineRepository engineRepository;
 
-
     @Override
     public Engine save(Engine engine) {
         return engineRepository.save(engine);

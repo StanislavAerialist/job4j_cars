@@ -1,0 +1,1 @@
+INSERT INTO engine (name) VALUES ('1.6'), ('2.0'), ('2.5'), ('3.0'), ('3.6');

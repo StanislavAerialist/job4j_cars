@@ -1,5 +1,6 @@
 package ru.job4j.cars.repository;
 
+import ru.job4j.cars.model.Category;
 import ru.job4j.cars.model.Post;
 
 import java.util.List;
@@ -15,5 +16,6 @@ public interface PostRepository {
     List<Post> findPostWithPhoto();
     List<Post> findPostByBrand(String brand);
     List<Post> findPostBySold(boolean sold);
+    List<Post> findPostByCategory(Category category);
     boolean setSold(int id);
 }

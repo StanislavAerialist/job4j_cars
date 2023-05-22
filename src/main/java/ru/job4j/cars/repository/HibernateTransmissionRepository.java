@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
-public class HibernateTransmissionRepository {
+public class HibernateTransmissionRepository implements TransmissionRepository {
     private final CrudRepository crudRepository;
 
     public Optional<Transmission> findById(int id) {

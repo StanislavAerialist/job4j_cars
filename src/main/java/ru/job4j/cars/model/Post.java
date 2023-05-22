@@ -24,6 +24,7 @@ public class Post {
     private String description;
     private LocalDateTime created = LocalDateTime.now();
     private boolean sold;
+    private int price;
 
     @ManyToOne
     @JoinColumn(name = "auto_user_id")

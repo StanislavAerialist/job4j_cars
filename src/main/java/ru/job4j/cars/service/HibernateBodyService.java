@@ -10,14 +10,16 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class HibernateBodyService {
+public class HibernateBodyService implements BodyService {
 
     private final HibernateBodyRepository bodyRepository;
 
+    @Override
     public Optional<Body> findById(int id) {
         return bodyRepository.findById(id);
     }
 
+    @Override
     public List<Body> findAll() {
         return bodyRepository.findAll();
     }

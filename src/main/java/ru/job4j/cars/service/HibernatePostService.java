@@ -2,6 +2,8 @@ package ru.job4j.cars.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.job4j.cars.model.Category;
+import ru.job4j.cars.model.File;
 import ru.job4j.cars.model.Post;
 import ru.job4j.cars.repository.HibernatePostRepository;
 
@@ -14,7 +16,8 @@ public class HibernatePostService implements PostService {
     private final HibernatePostRepository postRepository;
 
     @Override
-    public Post save(Post post) {
+    public Post saveWithFiles(Post post, List<File> savedFiles) {
+        post.setFiles(savedFiles);
         return postRepository.save(post);
     }
 
@@ -56,6 +59,11 @@ public class HibernatePostService implements PostService {
     @Override
     public List<Post> findPostBySold(boolean sold) {
         return postRepository.findPostBySold(sold);
+    }
+
+    @Override
+    public List<Post> findPostByCategory(Category category) {
+        return postRepository.findPostByCategory(category);
     }
 
     @Override

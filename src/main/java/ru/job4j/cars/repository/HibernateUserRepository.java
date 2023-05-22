@@ -8,157 +8,58 @@ import ru.job4j.cars.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
 public class HibernateUserRepository implements UserRepository {
-    private final SessionFactory sf;
+    private final CrudRepository crudRepository;
 
-    /**
-     * Сохранить в базе.
-     * @param user пользователь.
-     * @return пользователь с id.
-     */
-    @Override
-    public User create(User user) {
-        Session session = sf.openSession();
-        try {
-            session.beginTransaction();
-            session.save(user);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
-        }
-        return user;
-    }
-
-    /**
-     * Обновить в базе пользователя.
-     * @param user пользователь.
-     */
-    @Override
-    public void update(User user) {
-        Session session = sf.openSession();
-        try {
-            session.beginTransaction();
-            session.update(user);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
-        }
-    }
-
-    /**
-     * Удалить пользователя по id.
-     * @param userId ID
-     */
-    @Override
-    public void delete(int userId) {
-        Session session = sf.openSession();
-        try {
-            session.beginTransaction();
-            session.createQuery(
-                            "DELETE Item WHERE id = :fId")
-                    .setParameter("fId", userId)
-                    .executeUpdate();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
-        }
-    }
-
-    /**
-     * Список пользователь отсортированных по id.
-     * @return список пользователей.
-     */
-    @Override
-    public List<User> findAllOrderById() {
-        Session session = sf.openSession();
-        List<User> rsl = new ArrayList<>();
-        try {
-            session.beginTransaction();
-            rsl = session.createQuery("from User as u order by u.id", User.class).list();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
-        }
-        return rsl;
-    }
-
-    /**
-     * Найти пользователя по ID
-     * @return пользователь.
-     */
-    @Override
-    public Optional<User> findById(int id) {
-        Session session = sf.openSession();
+    public Optional<User> add(User user) {
         Optional<User> rsl = Optional.empty();
         try {
-            session.beginTransaction();
-            rsl = session.createQuery("from User as u where u.id = :uId", User.class)
-                    .setParameter("uId", id)
-                    .uniqueResultOptional();
-            session.getTransaction().commit();
+            crudRepository.run(session -> session.persist(user));
+            rsl = Optional.of(user);
         } catch (Exception e) {
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
+            e.printStackTrace();
         }
         return rsl;
     }
 
-    /**
-     * Список пользователей по login LIKE %key%
-     * @param key key
-     * @return список пользователей.
-     */
-    @Override
-    public List<User> findByLikeLogin(String key) {
-        Session session = sf.openSession();
-        List<User> rsl = new ArrayList<>();
-        try {
-            session.beginTransaction();
-            rsl = session.createQuery("from User where login like :uKey", User.class)
-                    .setParameter("uKey", "%" + key + "%")
-                    .getResultList();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
-        }
-        return rsl;
+    public boolean update(User user) {
+        return crudRepository.runForBoolean(session -> {
+            session.merge(user);
+            return true;
+        });
     }
+        public boolean deleteById(int id) {
+            return crudRepository.runForBoolean("delete from User where id = :fId",
+                    Map.of("fId", id)
+            );
+        }
 
-    /**
-     * Найти пользователя по login.
-     * @param login login.
-     * @return Optional or user.
-     */
-    @Override
+        public List<User> findAll() {
+            return crudRepository.query("from User", User.class);
+        }
+
+        @Override
+        public Optional<User> findById(int id) {
+            return crudRepository.optional(
+                    "from User where id = :tId", User.class, Map.of("tId", id));
+        }
+
+        public Optional<User> findByLoginAndPassword(String login, String password) {
+            return crudRepository.optional(
+                    "from User where login = :uLogin and password = :uPassword", User.class,
+                    Map.of("uLogin", login, "uPassword", password)
+            );
+        }
+
     public Optional<User> findByLogin(String login) {
-        Session session = sf.openSession();
-        Optional<User> rsl = Optional.empty();
-        try {
-            session.beginTransaction();
-            rsl = session.createQuery("from User as u where u.login = :uLogin", User.class)
-                    .setParameter("uLogin", login)
-                    .uniqueResultOptional();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
-        }
-        return rsl;
+        return crudRepository.optional(
+                "from User where login = :uLogin", User.class,
+                Map.of("uLogin", login)
+        );
     }
 }

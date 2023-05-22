@@ -19,7 +19,7 @@ public class OwnerRepositoryTest {
     private final SessionFactory sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
     private final CrudRepository crudRepository = new CrudRepository(sf);
     private final HibernateOwnerRepository ownerRepository = new HibernateOwnerRepository(crudRepository);
-    private final HibernateUserRepository userRepository = new HibernateUserRepository(sf);
+    private final HibernateUserRepository userRepository = new HibernateUserRepository(crudRepository);
 
     @BeforeEach
     public void cleanDb() {
@@ -38,7 +38,7 @@ public class OwnerRepositoryTest {
 
     @Test
     public void whenSaveOwner() {
-        User user = userRepository.create(new User(4, "login", "pass"));
+        User user = userRepository.add(new User(1, "name", "login", "pass")).get();
         Owner owner = new Owner(1, "OwnerName", user);
         Owner result = ownerRepository.save(owner);
         assertThat(result).isEqualTo(owner);
@@ -46,7 +46,7 @@ public class OwnerRepositoryTest {
 
     @Test
     public void whenUpdateOwnerThenFindId() {
-        User user = userRepository.create(new User(4, "login", "pass"));
+        User user = userRepository.add(new User(1, "name", "login", "pass")).get();
         ownerRepository.save(new Owner(1, "OwnerName1", user));
         Owner owner2 = new Owner(1, "OwnerName2", user);
         ownerRepository.update(owner2);
@@ -55,7 +55,7 @@ public class OwnerRepositoryTest {
 
     @Test
     public void whenDeleteOwner() {
-        User user = userRepository.create(new User(4, "login", "pass"));
+        User user = userRepository.add(new User(1, "name", "login", "pass")).get();
         Owner owner = ownerRepository.save(new Owner(1, "OwnerName1", user));
         ownerRepository.delete(owner.getId());
         assertThat(ownerRepository.findById(owner.getId())).isEqualTo(Optional.empty());
