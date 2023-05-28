@@ -72,7 +72,7 @@ public class HibernatePostRepository implements PostRepository {
 
     @Override
     public boolean setSold(int id) {
-        boolean status = findById(id).get().isSold() ? Boolean.FALSE : Boolean.TRUE;
+        var status = findById(id).get().isSold() ? Boolean.FALSE : Boolean.TRUE;
         return crudRepository.runForBoolean("UPDATE Post SET sold = :pSold WHERE id = :pId",
                 Map.of("pSold", status, "pId", id));
     }

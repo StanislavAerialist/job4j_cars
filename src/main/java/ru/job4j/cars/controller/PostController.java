@@ -78,13 +78,14 @@ public class PostController {
     }
 
     @PostMapping("/sеtSold/{id}")
-    public String setSold(Model model, @PathVariable int id) {
+    public String setStatusSold(Model model, @PathVariable int id) {
         var updateRsl = postService.setSold(id);
         if (!updateRsl) {
             model.addAttribute("message", "Не удалось изменить статус объявлению");
             return "errors/404";
         }
-        return "redirect:/index";
+        model.addAttribute("message", "Статус объявления успешно изменен");
+        return "posts/success";
     }
 
     @PostMapping("/delete/{id}")

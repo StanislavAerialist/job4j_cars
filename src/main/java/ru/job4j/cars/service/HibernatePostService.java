@@ -102,8 +102,8 @@ public class HibernatePostService implements PostService {
     }
 
     @Override
-    public List<Post> findPostBySold(boolean sold) {
-        return postRepository.findPostBySold(sold);
+    public List<PostDto> findPostBySold(boolean sold) {
+        return postDtoBuilder(postRepository.findPostBySold(sold));
     }
 
     @Override

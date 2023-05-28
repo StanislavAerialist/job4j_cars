@@ -17,6 +17,6 @@ public interface PostService {
     List<PostDto> findAll();
     List<PostDto> findPostFromLastDay();
     List<PostDto> findPostWithPhoto();
-    List<Post> findPostBySold(boolean sold);
+    List<PostDto> findPostBySold(boolean sold);
     boolean setSold(int id);
 }
