@@ -6,7 +6,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "auto_user")
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor

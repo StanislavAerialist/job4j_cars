@@ -6,7 +6,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "engine")
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @RequiredArgsConstructor

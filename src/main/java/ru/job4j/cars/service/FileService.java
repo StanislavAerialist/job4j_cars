@@ -12,6 +12,5 @@ public interface FileService {
     File save(FileDto fileDto);
     Optional<FileDto> findById(int id);
     List<File> findAll();
-
-    List<File> convertToFiles(List<MultipartFile> files) throws IOException;
+    boolean deleteById(int id);
 }

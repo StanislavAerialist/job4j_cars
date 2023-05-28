@@ -77,12 +77,20 @@ public class HibernateFileService implements FileService {
     }
 
     @Override
-    public List<File> convertToFiles(List<MultipartFile> files) throws IOException {
-        List<File> fileList = new ArrayList<>();
-        for (MultipartFile file : files) {
-            File savedFile = save(new FileDto(file.getOriginalFilename(), file.getBytes()));
-            fileList.add(savedFile);
+    public boolean deleteById(int id) {
+        var fileOptional = fileRepository.findById(id);
+        if (fileOptional.isEmpty()) {
+            return false;
         }
-        return fileList;
+        deleteFile(fileOptional.get().getPath());
+        return fileRepository.delete(id);
+    }
+
+    private void deleteFile(String path) {
+        try {
+            Files.deleteIfExists(Path.of(path));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

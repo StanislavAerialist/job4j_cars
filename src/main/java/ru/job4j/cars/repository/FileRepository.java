@@ -9,4 +9,5 @@ public interface FileRepository {
     File save(File file);
     Optional<File> findById(int id);
     List<File> findAll();
+    boolean delete(int fileId);
 }

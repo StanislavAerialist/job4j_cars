@@ -55,7 +55,7 @@ public class HibernatePostRepository implements PostRepository {
 
     @Override
     public List<Post> findPostWithPhoto() {
-        return crudRepository.query("SELECT p FROM Post p JOIN FETCH p.files WHERE size(files) > 0", Post.class);
+        return crudRepository.query("SELECT p FROM Post p JOIN FETCH p.file WHERE p.file.id is NOT NULL", Post.class);
     }
 
     @Override
@@ -66,14 +66,15 @@ public class HibernatePostRepository implements PostRepository {
 
     @Override
     public List<Post> findPostBySold(boolean sold) {
-        return crudRepository.query("from Post where sold = :pSold",
+        return crudRepository.query("SELECT p FROM Post p JOIN FETCH p.file where sold = :pSold",
                 Post.class, Map.of("pSold", sold));
     }
 
     @Override
     public boolean setSold(int id) {
-        return crudRepository.runForBoolean("UPDATE Post SET sold = :pSold where id = :pId",
-                Map.of("pSold", true, "pId", id));
+        boolean status = findById(id).get().isSold() ? Boolean.FALSE : Boolean.TRUE;
+        return crudRepository.runForBoolean("UPDATE Post SET sold = :pSold WHERE id = :pId",
+                Map.of("pSold", status, "pId", id));
     }
 
     @Override

@@ -19,7 +19,7 @@ public class HibernateUserRepository implements UserRepository {
     public Optional<User> add(User user) {
         Optional<User> rsl = Optional.empty();
         try {
-            crudRepository.run(session -> session.persist(user));
+            crudRepository.run(session -> session.save(user));
             rsl = Optional.of(user);
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,13 +49,14 @@ public class HibernateUserRepository implements UserRepository {
                     "from User where id = :tId", User.class, Map.of("tId", id));
         }
 
+        @Override
         public Optional<User> findByLoginAndPassword(String login, String password) {
             return crudRepository.optional(
                     "from User where login = :uLogin and password = :uPassword", User.class,
                     Map.of("uLogin", login, "uPassword", password)
             );
         }
-
+    @Override
     public Optional<User> findByLogin(String login) {
         return crudRepository.optional(
                 "from User where login = :uLogin", User.class,

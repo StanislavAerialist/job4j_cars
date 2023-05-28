@@ -30,4 +30,18 @@ public class HibernateFileRepository implements FileRepository {
     public List<File> findAll() {
         return crudRepository.query("from File", File.class);
     }
+
+    @Override
+    public boolean delete(int fileId) {
+        boolean rsl = false;
+        try {
+            crudRepository.runForBoolean("DELETE File WHERE id = :fId",
+                    Map.of("fId", fileId)
+            );
+            rsl = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return rsl;
+    }
 }

@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
 
-    <title>Автомаг</title>
+    <title>Список объявлений</title>
 </head>
 <body>
 
@@ -23,19 +23,19 @@
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto">
 
-                <!-- Выпадающий список фильтров -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="filtersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Фильтры объявлений
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="filtersDropdown">
-                        <form action="/posts/filter" method="get">
-                            <button type="submit" class="dropdown-item" name="filter" value="lastDay">За последний день</button>
-                            <button type="submit" class="dropdown-item" name="filter" value="withPhoto">С фото</button>
-                            <button type="submit" class="dropdown-item" name="filter" value="isSold">Только актуальные</button>
-                        </form>
-                    </div>
-                </li>
+                    <!-- Выпадающий список фильтров -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="filtersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Фильтры объявлений
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="filtersDropdown">
+                            <form action="/posts/filter" method="get">
+                                <button type="submit" class="dropdown-item" name="filter" value="lastDay">За последний день</button>
+                                <button type="submit" class="dropdown-item" name="filter" value="withPhoto">С фото</button>
+                                <button type="submit" class="dropdown-item" name="filter" value="isSold">Только актуальные</button>
+                            </form>
+                        </div>
+                    </li>
                 </ul>
                 <div class="navbar-nav" th:if="${user.name == 'Гость'}">
                     <a class="nav-link me-3" th:href="@{/users/register}">Регистрация</a>
@@ -57,29 +57,36 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
+                    <th scope="col">Фото</th>
+                    <th scope="col">Марка автомобиля</th>
                     <th scope="col">Название автомобиля</th>
+                    <th scope="col">Двигатель</th>
+                    <th scope="col">Коробка передач</th>
                     <th scope="col">Дата и время создания</th>
                     <th scope="col">Состояние</th>
-                    <th scope="col">Стоимость</th>
+                    <th scope="col">Стоимость, руб.</th>
+                    <th scope="col">Контактное лицо</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="post : ${posts}">
                     <td>
-                        <img th:if="${not #lists.isEmpty(post.files)}"
-                             th:src="@{/files/{fileId}(fileId=${post.files[0].getId()})}"
-                             class="rounded-circle w=100" alt="No image">
+                        <img th:src="@{/files/{fileId}(fileId=${post.fileId})}" class="w-25" alt="No image">
                     </td>
-                    <td><a th:text="${post.car.name}" th:href="@{/posts/{postId}(postId=${post.id})}"></a></td>
+                    <td th:text="${post.brandName}"/>
+                    <td><a th:text="${post.carName}" th:href="@{/posts/{postId}(postId=${post.id})}"></a></td>
+                    <td th:text="${post.engineName}"/>
+                    <td th:text="${post.transmissionName}"/>
                     <td th:text="${#temporals.format(post.created, 'dd-MM-yyyy HH:mm')}"/>
                     <td th:text="${post.sold} == true ? 'Продано' : 'В продаже'"/>
                     <td th:text="${post.price}"/>
+                    <td th:text="${post.user.name}"/>
                 </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Кнопка для добавления нового задания -->
+        <!-- Кнопка для добавления нового объявления -->
         <div class="mb-3 row">
             <div class="col-9"></div>
             <div class="col-6">

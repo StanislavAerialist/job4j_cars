@@ -13,7 +13,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EngineRepositoryTest {
-    /*
+
     private final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
     private final SessionFactory sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
     private final CrudRepository crudRepository = new CrudRepository(sf);
@@ -55,5 +55,5 @@ public class EngineRepositoryTest {
         assertThat(engineRepository.findById(engine.getId())).isEqualTo(Optional.empty());
     }
 
-     */
+
 }

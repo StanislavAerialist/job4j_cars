@@ -6,16 +6,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
+import ru.job4j.cars.dto.FileDto;
+import ru.job4j.cars.dto.PostCreateDto;
 import ru.job4j.cars.model.*;
 import ru.job4j.cars.service.*;
 
-import java.util.List;
+import java.io.IOException;
 
 @Controller
 @AllArgsConstructor
+@RequestMapping({"/posts", "/index", "/"})
 public class PostController {
     private final PostService postService;
-    private final FileService fileService;
     private final CategoryService categoryService;
     private final BodyService bodyService;
     private final BrandService brandService;
@@ -24,29 +26,7 @@ public class PostController {
 
     @GetMapping({"/", "/index"})
     public String getAll(Model model) {
-        List<Category> categories = categoryService.findAll();
-        List<Post> posts = postService.findAll();
-        model.addAttribute("categories", categories);
-        model.addAttribute("posts", posts);
-        return "index";
-    }
-
-    @GetMapping("/category")
-    public String getCategory(@RequestParam(name = "id", required = false) Integer categoryId, Model model) {
-        if (categoryId != null) {
-            var categoryOptional = categoryService.findById(categoryId);
-            if (categoryOptional.isPresent()) {
-                List<Post> posts = postService.findPostByCategory(categoryOptional.get());
-                model.addAttribute("posts", posts);
-            }
-        }
-        return "index";
-    }
-
-    @GetMapping("/sold")
-    public String getPostsBySold(@RequestParam(name = "sold") boolean sold, Model model) {
-        List<Post> posts = postService.findPostBySold(sold);
-        model.addAttribute("posts", posts);
+        model.addAttribute("posts", postService.findAll());
         return "index";
     }
 
@@ -73,31 +53,17 @@ public class PostController {
     }
 
     @PostMapping("/add")
-    public String create(@ModelAttribute Post post, @SessionAttribute User user,
-                         @RequestParam("categoryId") int categoryId,
-                         @RequestParam("bodyId") int bodyId,
-                         @RequestParam("engineId") int engineId,
-                         @RequestParam("transmissionId") int transmissionId,
-                         @RequestPart("files") List<MultipartFile> files, Model model) {
-        try {
-            Car car = new Car();
-            car.setCategory(categoryService.findById(categoryId).get());
-            car.setBody(bodyService.findById(bodyId).get());
-            car.setEngine(engineService.findById(engineId).get());
-            car.setTransmission(transmissionService.findById(transmissionId).get());
-            Owner owner = new Owner();
-            owner.setUser(user);
-            car.setOwner(owner);
-            post.setCar(car);
-            post.setUser(user);
-            List<File> savedFiles = fileService.convertToFiles(files);
-            postService.saveWithFiles(post, savedFiles);
-            model.addAttribute("message", "Ваше объявление добавлено успешно!");
-            return "posts/success";
-        } catch (Exception e) {
-            model.addAttribute("message", e.getMessage());
+    public String create(@ModelAttribute PostCreateDto postDto,
+                         @RequestParam MultipartFile fileDto, Model model,
+                         @SessionAttribute User user) throws IOException {
+        postDto.setUser(user);
+        var postOptional = postService.add(postDto, new FileDto(fileDto.getOriginalFilename(), fileDto.getBytes()));
+        if (postOptional.isEmpty()) {
+            model.addAttribute("message", "Объявление не найдено");
             return "errors/404";
         }
+        model.addAttribute("message", "Объявление добавлено успешно");
+        return "posts/success";
     }
 
     @GetMapping("/{id}")
@@ -111,19 +77,17 @@ public class PostController {
         return "posts/one";
     }
 
-    @GetMapping("/state/{id}")
-    public String updateState(Model model, @PathVariable int id, @SessionAttribute User user) {
-        model.addAttribute("user", user);
-        var isUpdatedState = postService.setSold(id);
-        if (!isUpdatedState) {
-            model.addAttribute("message", "Ошибка. Статус объявления не обновлен");
+    @PostMapping("/sеtSold/{id}")
+    public String setSold(Model model, @PathVariable int id) {
+        var updateRsl = postService.setSold(id);
+        if (!updateRsl) {
+            model.addAttribute("message", "Не удалось изменить статус объявлению");
             return "errors/404";
         }
-        model.addAttribute("message", "Статус объявления изменен на Продано");
-        return "posts/success";
+        return "redirect:/index";
     }
 
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String delete(Model model, @PathVariable int id, @SessionAttribute User user) {
         model.addAttribute("user", user);
         var isDeleted = postService.delete(id);
@@ -132,6 +96,6 @@ public class PostController {
             return "errors/404";
         }
         model.addAttribute("message", "Объявление удалено успешно");
-        return "success/success";
+        return "posts/success";
     }
 }

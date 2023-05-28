@@ -1,9 +1,6 @@
 package ru.job4j.cars.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -37,8 +34,8 @@ public class Post {
     @ManyToMany
     @JoinTable(
             name = "participates",
-            joinColumns = { @JoinColumn(name = "auto_post_id") },
-            inverseJoinColumns = { @JoinColumn(name = "auto_user_id") }
+            joinColumns = { @JoinColumn(name = "post_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") }
     )
     private List<User> participates = new ArrayList<>();
 
@@ -46,7 +43,7 @@ public class Post {
     @JoinColumn(name = "car_id")
     private Car car;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "auto_post_id")
-    private List<File> files = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "file_id", referencedColumnName = "id")
+    private File file;
 }

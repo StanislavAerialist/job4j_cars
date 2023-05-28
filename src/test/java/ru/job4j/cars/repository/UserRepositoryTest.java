@@ -14,7 +14,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserRepositoryTest {
-    /*
+
     private final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
     private final SessionFactory sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
 
@@ -57,5 +57,5 @@ public class UserRepositoryTest {
         assertThat(userRepository.findById(user.getId())).isEqualTo(Optional.empty());
     }
 
-     */
+
 }

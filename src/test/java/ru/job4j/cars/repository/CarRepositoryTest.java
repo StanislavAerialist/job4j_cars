@@ -9,10 +9,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.junit.jupiter.api.*;
 
 
-import ru.job4j.cars.model.Car;
-import ru.job4j.cars.model.Engine;
-import ru.job4j.cars.model.Owner;
-import ru.job4j.cars.model.User;
+import ru.job4j.cars.model.*;
 
 import java.util.Optional;
 import java.util.Set;
@@ -20,14 +17,15 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CarRepositoryTest {
-/*
+
+
     private final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
     private final SessionFactory sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
     private final CrudRepository crudRepository = new CrudRepository(sf);
     private final HibernateCarRepository carRepository = new HibernateCarRepository(crudRepository);
     private final HibernateEngineRepository engineRepository = new HibernateEngineRepository(crudRepository);
     private final HibernateOwnerRepository ownerRepository = new HibernateOwnerRepository(crudRepository);
-    private final HibernateUserRepository userRepository = new HibernateUserRepository(sf);
+    private final HibernateUserRepository userRepository = new HibernateUserRepository(crudRepository);
 
     @BeforeEach
     public void cleanDb() {
@@ -48,32 +46,27 @@ class CarRepositoryTest {
 
     @Test
     public void whenSaveCarThenFindById() {
-        Engine engine = engineRepository.save(new Engine(1, "EngineName1"));
-        User user = userRepository.create(new User(4, "login", "pass"));
-        Owner owner = ownerRepository.save(new Owner(1, "OwnerName1", user));
-        Car result = carRepository.save(new Car(1, "CarName1", engine, owner, Set.of(owner)));
+        Car result = carRepository.save(new Car());
         assertThat(result).isEqualTo(carRepository.findById(result.getId()).get());
     }
 
     @Test
     public void whenDeleteCar() {
-        Engine engine = engineRepository.save(new Engine(1, "EngineName1"));
-        User user = userRepository.create(new User(4, "login", "pass"));
-        Owner owner = ownerRepository.save(new Owner(1, "OwnerName1", user));
-        Car car = carRepository.save(new Car(1, "CarName1", engine, owner, Set.of(owner)));
+        Car car = carRepository.save(new Car());
         carRepository.delete(car.getId());
         assertThat(carRepository.findById(car.getId())).isEqualTo(Optional.empty());
     }
 
+
     @Test
     public void whenUpdateCar() {
-        Engine engine = engineRepository.save(new Engine(1, "EngineName1"));
-        User user = userRepository.create(new User(4, "login", "pass"));
-        Owner owner = ownerRepository.save(new Owner(1, "OwnerName1", user));
-        Car car1 = carRepository.save(new Car(1, "CarName1", engine, owner, Set.of(owner)));
-        Car car2 = new Car(1, "CarName2", engine, owner, Set.of(owner));
-        carRepository.update(car2);
-        assertThat(carRepository.findById(car1.getId()).get().getName()).isEqualTo("CarName2");
+        Car car = new Car();
+        car.setName("name1");
+        carRepository.save(car);
+        car.setName("name2");
+        carRepository.update(car);
+        assertThat(carRepository.findById(car.getId()).get().getName()).isEqualTo("name2");
     }
- */
+
+
 }

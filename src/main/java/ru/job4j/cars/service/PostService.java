@@ -1,22 +1,22 @@
 package ru.job4j.cars.service;
 
+import ru.job4j.cars.dto.FileDto;
+import ru.job4j.cars.dto.PostCreateDto;
+import ru.job4j.cars.dto.PostDto;
 import ru.job4j.cars.model.Category;
-import ru.job4j.cars.model.File;
 import ru.job4j.cars.model.Post;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface PostService {
-    Post saveWithFiles(Post post, List<File> savedFiles);
+    Optional<Post> add(PostCreateDto postDto, FileDto image);
     boolean update(Post post);
     boolean delete(int id);
-    Optional<Post> findById(int id);
-    List<Post> findAll();
-    List<Post> findPostFromLastDay();
-    List<Post> findPostWithPhoto();
-    List<Post> findPostByBrand(String brand);
+    Optional<PostDto> findById(int id);
+    List<PostDto> findAll();
+    List<PostDto> findPostFromLastDay();
+    List<PostDto> findPostWithPhoto();
     List<Post> findPostBySold(boolean sold);
-    List<Post> findPostByCategory(Category category);
     boolean setSold(int id);
 }
