@@ -79,8 +79,7 @@ public class PostController {
 
     @PostMapping("/sеtSold/{id}")
     public String setStatusSold(Model model, @PathVariable int id) {
-        var updateRsl = postService.setSold(id);
-        if (!updateRsl) {
+        if (!postService.setSold(id)) {
             model.addAttribute("message", "Не удалось изменить статус объявлению");
             return "errors/404";
         }
