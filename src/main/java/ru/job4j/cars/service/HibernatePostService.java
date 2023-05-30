@@ -7,6 +7,7 @@ import ru.job4j.cars.dto.PostCreateDto;
 import ru.job4j.cars.dto.PostDto;
 import ru.job4j.cars.model.*;
 import ru.job4j.cars.repository.*;
+import ru.job4j.cars.service.PostMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,18 +25,7 @@ public class HibernatePostService implements PostService {
     private final BodyRepository bodyRepository;
     private final BrandRepository brandRepository;
     private final CategoryRepository categoryRepository;
-    private List<PostDto> postDtoBuilder(List<Post> posts) {
-        return posts.stream().map(post ->
-                new PostDto(post.getId(), post.getPrice(), post.getFile().getId(), post.isSold(),
-                        bodyRepository.findById(post.getCar().getBody().getId()).get().getName(),
-                        brandRepository.findById(post.getCar().getBrand().getId()).get().getName(),
-                        categoryRepository.findById(post.getCar().getCategory().getId()).get().getName(),
-                        transmissionRepository.findById(post.getCar().getTransmission().getId()).get().getName(),
-                        engineRepository.findById(post.getCar().getEngine().getId()).get().getName(),
-                        post.getCar().getName(), post.getDescription(), post.getUser(),
-                        post.getCreated())).toList();
-    }
-
+    private final PostMapper postMapper;
 
     @Override
     public Optional<Post> add(PostCreateDto postDto, FileDto image) {
@@ -83,27 +73,27 @@ public class HibernatePostService implements PostService {
 
     @Override
     public Optional<PostDto> findById(int postId) {
-        return postDtoBuilder(List.of(postRepository.findById(postId).get())).stream().findFirst();
+        return postMapper.toDto(postRepository.findById(postId).get());
     }
 
     @Override
     public List<PostDto> findAll() {
-        return postDtoBuilder(postRepository.findAll());
+        return postMapper.toDtoList(postRepository.findAll());
     }
 
     @Override
     public List<PostDto> findPostFromLastDay() {
-        return postDtoBuilder(postRepository.findPostFromLastDay());
+        return postMapper.toDtoList(postRepository.findPostFromLastDay());
     }
 
     @Override
     public List<PostDto> findPostWithPhoto() {
-        return postDtoBuilder(postRepository.findPostWithPhoto());
+        return postMapper.toDtoList(postRepository.findPostWithPhoto());
     }
 
     @Override
     public List<PostDto> findPostBySold(boolean sold) {
-        return postDtoBuilder(postRepository.findPostBySold(sold));
+        return postMapper.toDtoList(postRepository.findPostBySold(sold));
     }
 
     @Override

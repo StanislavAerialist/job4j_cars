@@ -26,8 +26,8 @@ public class UserController {
     public String register(@ModelAttribute User user, Model model) {
         var savedUser = userService.add(user);
         if (savedUser.isEmpty()) {
-            model.addAttribute("message", "Пользователь с таким логином уже существует");
-            return "errors/404";
+            model.addAttribute("error", "Пользователь с таким логином уже существует");
+            return "users/register";
         }
         return "redirect:/index";
     }

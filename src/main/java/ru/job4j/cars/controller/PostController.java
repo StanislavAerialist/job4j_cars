@@ -59,7 +59,7 @@ public class PostController {
         postDto.setUser(user);
         var postOptional = postService.add(postDto, new FileDto(fileDto.getOriginalFilename(), fileDto.getBytes()));
         if (postOptional.isEmpty()) {
-            model.addAttribute("message", "Объявление не найдено");
+            model.addAttribute("message", "Ошибка при добавлении объявления");
             return "errors/404";
         }
         model.addAttribute("message", "Объявление добавлено успешно");

@@ -1,12 +1,11 @@
 package ru.job4j.cars.repository;
 
 import lombok.AllArgsConstructor;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -14,6 +13,8 @@ import java.util.Optional;
 @Repository
 @AllArgsConstructor
 public class HibernateUserRepository implements UserRepository {
+
+    private static final Logger LOG = LogManager.getLogger(HibernateUserRepository.class.getName());
     private final CrudRepository crudRepository;
 
     public Optional<User> add(User user) {
@@ -22,7 +23,7 @@ public class HibernateUserRepository implements UserRepository {
             crudRepository.run(session -> session.save(user));
             rsl = Optional.of(user);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.debug(e.getMessage(), e);
         }
         return rsl;
     }
