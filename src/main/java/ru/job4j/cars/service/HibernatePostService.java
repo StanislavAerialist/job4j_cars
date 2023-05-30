@@ -7,7 +7,6 @@ import ru.job4j.cars.dto.PostCreateDto;
 import ru.job4j.cars.dto.PostDto;
 import ru.job4j.cars.model.*;
 import ru.job4j.cars.repository.*;
-import ru.job4j.cars.service.PostMapper;
 
 import java.util.List;
 import java.util.Optional;
