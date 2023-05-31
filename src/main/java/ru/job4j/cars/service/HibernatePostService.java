@@ -72,7 +72,7 @@ public class HibernatePostService implements PostService {
 
     @Override
     public Optional<PostDto> findById(int postId) {
-        return postMapper.toDto(postRepository.findById(postId).get());
+        return Optional.of(postMapper.toDto(postRepository.findById(postId).get()));
     }
 
     @Override
